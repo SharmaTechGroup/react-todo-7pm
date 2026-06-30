@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "user_id": "john_nareshit",
+      "user_name": "Johnson",
+      "password": "john123",
+      "email": "john@msn.com",
+      "id": "tTyvtj1zbB8"
+    },
+    {
+      "user_id": "rakesh_nit",
+      "user_name": "Rakesh",
+      "password": "rak",
+      "email": "rakesh@gmail.com",
+      "id": "FAjRyv2vgNk"
+    }
+  ],
+  "appointments": [
+    {
+      "title": "meeting",
+      "description": "meeting with client",
+      "date": "2026-06-28",
+      "user_id": "rakesh_nit",
+      "id": "0k65ThNAt-U"
+    },
+     {
+      "title": "Birthday",
+      "description": "Party",
+      "date": "2026-06-29",
+      "user_id": "rakesh_nit",
+      "id": "0k65ThNAt-U"
+    },
+     {
+      "title": "React Class",
+      "description": "7:00 PM Class",
+      "date": "2026-06-30",
+      "user_id": "john_nareshit",
+      "id": "0k65ThNAt-U"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
