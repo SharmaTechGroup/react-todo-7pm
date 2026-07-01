@@ -17,25 +17,18 @@
   ],
   "appointments": [
     {
-      "title": "meeting",
-      "description": "meeting with client",
-      "date": "2026-06-28",
-      "user_id": "rakesh_nit",
-      "id": "0k65ThNAt-U"
+      "id": "361RvI1NZ9U",
+      "title": "Javascript Workshop",
+      "description": "State Management",
+      "date": "2026-07-09",
+      "user_id": "rakesh_nit"
     },
-     {
-      "title": "Birthday",
-      "description": "Party",
-      "date": "2026-06-29",
-      "user_id": "rakesh_nit",
-      "id": "0k65ThNAt-U"
-    },
-     {
-      "title": "React Class",
-      "description": "7:00 PM Class",
-      "date": "2026-06-30",
+    {
+      "title": "demo",
+      "description": "sample",
+      "date": "2026-07-09",
       "user_id": "john_nareshit",
-      "id": "0k65ThNAt-U"
+      "id": "9QEAVOhc94Y"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
