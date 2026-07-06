@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCookies } from "react-cookie";
 import { data, Link, useNavigate } from "react-router-dom";
 
@@ -8,6 +8,8 @@ export function ToDoDashboard(){
     const [cookies, setCookie, removeCookie] = useCookies(['userid', 'username']);
     const [appointments, setAppointments] = useState([{id:'', title:'', description:'', date:'', user_id:''}]);
     const [editAppointment, setEditAppointment] = useState({id:'', title:'', description:'', date:'', user_id:''});
+
+    const [searchString, setSearchString] = useState('');
 
     let navigate = useNavigate();
 
@@ -44,13 +46,25 @@ export function ToDoDashboard(){
         enableReinitialize: true
     })
 
+    /*
     function LoadAppointments(){
          axios.get('http://localhost:3000/appointments')
         .then(response=>{
              let userAppointments = response.data.filter(appointment=> appointment.user_id===cookies['userid']);
              setAppointments(userAppointments);
         })
-    }
+    }*/
+
+
+    const LoadAppointments = useCallback(()=>{
+
+         axios.get('http://localhost:3000/appointments')
+        .then(response=>{
+             let userAppointments = response.data.filter(appointment=> appointment.user_id===cookies['userid']);
+             setAppointments(userAppointments);
+        })
+
+    },[cookies, searchString])
 
     useEffect(()=>{
 
@@ -65,6 +79,7 @@ export function ToDoDashboard(){
     }
 
 
+    /*
     function handleEditClick(id){
        
         axios.get(`http://localhost:3000/appointments/${id}`)
@@ -73,6 +88,14 @@ export function ToDoDashboard(){
         })
     
     }
+    */
+
+    const handleEditClick = useCallback((id)=>{
+        axios.get(`http://localhost:3000/appointments/${id}`)
+        .then(response=>{
+            setEditAppointment(response.data);
+        })
+    },[appointments, cookies])
 
     function handleDeleteClick(id){
         let choice = confirm('Are you sure?\nWant to Delete');
@@ -83,6 +106,22 @@ export function ToDoDashboard(){
             })
         }
     }
+
+    function handleSearchChange(e){
+        setSearchString(e.target.value);
+        console.log(e.target.value);
+    }
+
+    const filteredAppointments = useMemo(()=>{
+
+            if(searchString===''){
+                return appointments;
+            } else {
+                return appointments.filter(appointment=> appointment.title.toLowerCase().includes(searchString.toLowerCase()));
+            }  
+
+    },[searchString])
+
 
     return(
         <div className="row p-2">
@@ -109,7 +148,7 @@ export function ToDoDashboard(){
             <div className="col-10">
                 <div className="bg-light mt-1 p-3">
                     <div className="input-group">
-                        <input type="text" placeholder="search appointments" className="form-control" />
+                        <input type="text" onChange={handleSearchChange} placeholder="search appointments" className="form-control" />
                         <button className="bi bi-search btn btn-dark"></button>
                     </div>
                 </div>
@@ -161,7 +200,8 @@ export function ToDoDashboard(){
                 </div>
                 <div className="mt-4 d-flex flex-wrap">
                     {
-                        appointments.map(appointment=>
+                        (filteredAppointments.length===0)?<span>No Records Found</span>:
+                        filteredAppointments.map(appointment=>
                             <div key={appointment.id} className="card w-25  p-2 m-2">
                                 <div className="card-header fw-bold"> 
                                     {appointment.title.toUpperCase()}

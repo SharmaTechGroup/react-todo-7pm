@@ -29,6 +29,13 @@
       "date": "2026-07-09",
       "user_id": "john_nareshit",
       "id": "9QEAVOhc94Y"
+    },
+    {
+      "title": "Meeting",
+      "description": "Client Meeting",
+      "date": "2026-07-14",
+      "user_id": "rakesh_nit",
+      "id": "TvdXL-mzv08"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
