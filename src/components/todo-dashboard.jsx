@@ -2,7 +2,10 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 import { data, Link, useNavigate } from "react-router-dom";
+import { addToShare } from "../slicers/task-slicer";
+import store from "../store/store";
 
 export function ToDoDashboard(){
     const [cookies, setCookie, removeCookie] = useCookies(['userid', 'username']);
@@ -12,6 +15,8 @@ export function ToDoDashboard(){
     const [searchString, setSearchString] = useState('');
 
     let navigate = useNavigate();
+
+    let dispatch = useDispatch();
 
     const formikAdd = useFormik({
         initialValues: {
@@ -64,7 +69,7 @@ export function ToDoDashboard(){
              setAppointments(userAppointments);
         })
 
-    },[cookies, searchString])
+    },[cookies])
 
     useEffect(()=>{
 
@@ -120,7 +125,12 @@ export function ToDoDashboard(){
                 return appointments.filter(appointment=> appointment.title.toLowerCase().includes(searchString.toLowerCase()));
             }  
 
-    },[searchString])
+    },[searchString, appointments])
+
+    function handleShareClick(appointment){
+        alert('appointment shared');
+        dispatch(addToShare(appointment));
+    }
 
 
     return(
@@ -165,7 +175,22 @@ export function ToDoDashboard(){
                         </select>
                     </div>
                    </div>
-                   <button data-bs-toggle="modal" data-bs-target="#newAppointment" className="btn btn-primary bi bi-plus-circle"> New Appointment</button>
+                   <div>
+                    <button data-bs-target="#shared" data-bs-toggle="offcanvas" className="btn btn-dark bi bi-share mx-2 position-relative"> <span className="badge bg-danger rounded rounded-circle position-absolute">{store.getState().appointmentsCount}</span> </button>
+                    <div className="offcanvas offcanvas-end" id="shared">
+                        <div className="offcanvas-header">
+                            <h3>Shared Appointments</h3>
+                            <button className="btn btn-close" data-bs-dismiss="offcanvas"></button>
+                        </div>
+                        <div className="offcanvas-body">
+                            {
+                                store.getState().appointments.map(appointment=><div className="my-3 fw-bold" key={appointment.id}> {appointment.title} [{appointment.user_id}] </div>)
+                            }
+                        </div>
+                    </div>
+                    <button data-bs-toggle="modal" data-bs-target="#newAppointment" className="btn btn-primary bi bi-plus-circle"> New Appointment</button>
+                   </div>
+                   
                    <div className="modal fade" id="newAppointment">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
@@ -218,6 +243,7 @@ export function ToDoDashboard(){
                                     <button onClick={()=> {handleEditClick(appointment.id)} } data-bs-toggle="modal" data-bs-target="#editAppointment" className="btn btn-warning mx-2 bi bi-pen-fill"></button>
                                    
                                     <button onClick={()=>{ handleDeleteClick(appointment.id)}} className="btn btn-danger bi bi-trash-fill"></button>
+                                    <button  onClick={()=>{ handleShareClick(appointment) }} className="btn btn-dark bi bi-share mx-2"></button>
                                 </div>
                                  <div className="modal fade" id="editAppointment">
                                             <div className="modal-dialog modal-dialog-centered">
